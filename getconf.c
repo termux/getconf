@@ -32,7 +32,9 @@
 
 #include <err.h>
 #include <errno.h>
+#ifndef __ANDROID__
 #include <values.h>
+#endif
 #include <limits.h>
 #include <locale.h>
 #include <stdio.h>
@@ -47,7 +49,9 @@ struct conf_variable {
 };
 
 static const struct conf_variable conf_table[] = {
+#ifdef _CS_PATH
 { "PATH",			CONFSTR,	_CS_PATH		},
+#endif
 
 /* Utility Limit Minimum Values */
 { "POSIX2_BC_BASE_MAX",		CONSTANT,	_POSIX2_BC_BASE_MAX	},
@@ -61,15 +65,23 @@ static const struct conf_variable conf_table[] = {
 { "POSIX2_VERSION",		CONSTANT,	_POSIX2_VERSION		},
 
 /* POSIX.1 Minimum Values */
+#ifdef _POSIX_AIO_LISTIO_MAX
 { "_POSIX_AIO_LISTIO_MAX",	CONSTANT,	_POSIX_AIO_LISTIO_MAX	},
+#endif
+#ifdef _POSIX_AIO_MAX
 { "_POSIX_AIO_MAX",		CONSTANT,       _POSIX_AIO_MAX		},
+#endif
 { "_POSIX_ARG_MAX",		CONSTANT,	_POSIX_ARG_MAX		},
 { "_POSIX_CHILD_MAX",		CONSTANT,	_POSIX_CHILD_MAX	},
 { "_POSIX_LINK_MAX",		CONSTANT,	_POSIX_LINK_MAX		},
 { "_POSIX_MAX_CANON",		CONSTANT,	_POSIX_MAX_CANON	},
 { "_POSIX_MAX_INPUT",		CONSTANT,	_POSIX_MAX_INPUT	},
+#ifdef _POSIX_MQ_OPEN_MAX
 { "_POSIX_MQ_OPEN_MAX",		CONSTANT,	_POSIX_MQ_OPEN_MAX	},
+#endif
+#ifdef _POSIX_MQ_PRIO_MAX
 { "_POSIX_MQ_PRIO_MAX",		CONSTANT,	_POSIX_MQ_PRIO_MAX	},
+#endif
 { "_POSIX_NAME_MAX",		CONSTANT,	_POSIX_NAME_MAX		},
 { "_POSIX_NGROUPS_MAX",		CONSTANT,	_POSIX_NGROUPS_MAX	},
 { "_POSIX_OPEN_MAX",		CONSTANT,	_POSIX_OPEN_MAX		},
@@ -148,9 +160,15 @@ static const struct conf_variable conf_table[] = {
 { "_POSIX_THREADS",		SYSCONF,	_SC_THREADS		},
 
 /* POSIX.1j Configurable System Variables */
+#ifdef _SC_BARRIERS
 { "_POSIX_BARRIERS",		SYSCONF,	_SC_BARRIERS		},
+#endif
+#ifdef _SC_READER_WRITER_LOCKS
 { "_POSIX_READER_WRITER_LOCKS", SYSCONF,	_SC_READER_WRITER_LOCKS	},
+#endif
+#ifdef _SC_SPIN_LOCKS
 { "_POSIX_SPIN_LOCKS",		SYSCONF,	_SC_SPIN_LOCKS		},
+#endif
 
 /* XPG4.2 Configurable System Variables */
 { "IOV_MAX",			SYSCONF,	_SC_IOV_MAX		},
@@ -191,7 +209,7 @@ static const struct conf_variable conf_table[] = {
 { "UINT_MAX",			UCONSTANT,	(long) UINT_MAX		},
 { "ULONG_MAX",			UCONSTANT,	(long) ULONG_MAX	},
 { "USHRT_MAX",			UCONSTANT,	(long) USHRT_MAX	},
-{ "WORD_BIT",			CONSTANT,	WORD_BIT		},
+{ "WORD_BIT",			CONSTANT,	sizeof(int)*8		},
 
 { NULL, CONSTANT, 0L }
 };
@@ -248,6 +266,7 @@ static int print_sysconf(const struct conf_variable *cp, const char *pathname)
 	return 0;
 }
 
+#ifndef __ANDROID__
 static int print_confstr(const struct conf_variable *cp, const char *pathname)
 {
 	size_t len;
@@ -265,6 +284,7 @@ error:
 	if (errno != EINVAL) err(EXIT_FAILURE, "confstr(%ld)", cp->value);
 	return -1;
 }
+#endif
 
 static int print_pathconf(const struct conf_variable *cp, const char *pathname)
 {
@@ -283,7 +303,9 @@ static int print_pathconf(const struct conf_variable *cp, const char *pathname)
 typedef int (*handler_t)(const struct conf_variable *cp, const char *pathname);
 static const handler_t type_handlers[NUM_TYPES] = {
 	[SYSCONF]	= print_sysconf,
+#ifndef __ANDROID__
 	[CONFSTR]	= print_confstr,
+#endif
 	[PATHCONF]	= print_pathconf,
 	[CONSTANT]	= print_constant,
 	[UCONSTANT]	= print_uconstant,
