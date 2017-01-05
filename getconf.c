@@ -241,19 +241,19 @@ static void print_string(const char *name, const char *val)
 	else printf("%s\n", val);
 }
 
-static int print_constant(const struct conf_variable *cp, const char *pathname)
+static int print_constant(const struct conf_variable *cp, const char *pathname __attribute__ ((unused)))
 {
 	print_long(cp->name, cp->value);
 	return 0;
 }
 
-static int print_uconstant(const struct conf_variable *cp, const char *pathname)
+static int print_uconstant(const struct conf_variable *cp, const char *pathname __attribute__ ((unused)))
 {
 	print_ulong(cp->name, (unsigned long) cp->value);
 	return 0;
 }
 
-static int print_sysconf(const struct conf_variable *cp, const char *pathname)
+static int print_sysconf(const struct conf_variable *cp, const char *pathname __attribute__ ((unused)))
 {
 	long val;
 
