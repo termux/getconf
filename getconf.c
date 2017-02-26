@@ -34,9 +34,6 @@
 
 #include <err.h>
 #include <errno.h>
-#ifndef __ANDROID__
-#include <values.h>
-#endif
 #include <limits.h>
 #include <locale.h>
 #include <stdio.h>
