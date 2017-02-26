@@ -30,6 +30,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#define _GNU_SOURCE
+
 #include <err.h>
 #include <errno.h>
 #ifndef __ANDROID__
@@ -267,7 +269,7 @@ static int print_sysconf(const struct conf_variable *cp, const char *pathname __
 }
 
 #ifndef __ANDROID__
-static int print_confstr(const struct conf_variable *cp, const char *pathname)
+static int print_confstr(struct conf_variable const* cp, char const* pathname __attribute__ ((unused)))
 {
 	size_t len;
 	char *val;
