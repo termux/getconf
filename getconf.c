@@ -186,7 +186,9 @@ static const struct conf_variable conf_table[] = {
 
 /* Commonly provided extensions */
 { "_PHYS_PAGES",		SYSCONF,	_SC_PHYS_PAGES		},
+#ifdef _SC_AVPHYS_PAGES
 { "_AVPHYS_PAGES",		SYSCONF,	_SC_AVPHYS_PAGES	},
+#endif
 { "_NPROCESSORS_CONF",		SYSCONF,	_SC_NPROCESSORS_CONF	},
 { "_NPROCESSORS_ONLN",		SYSCONF,	_SC_NPROCESSORS_ONLN	},
 
@@ -217,8 +219,10 @@ static int all = 0;
 
 static void usage(const char *p)
 {
-	(void)fprintf(stderr, "Usage: %s system_var\n\t%s -a\n"
-	    "\t%s path_var pathname\n\t%s -a pathname\n", p, p, p, p);
+	(void)fprintf(stderr, "Usage: %s system_var\n"
+	                      "       %s -a\n"
+	                      "       %s path_var pathname\n"
+	                      "       %s -a pathname\n", p, p, p, p);
 	exit(EXIT_FAILURE);
 }
 
