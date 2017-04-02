@@ -8,6 +8,8 @@
  * Mostly rewritten to be used in Alpine Linux (with musl c-library)
  * by Timo Teräs.
  *
+ * Maintained for use in Termux (and more) by Fredrik Fornwall.
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
